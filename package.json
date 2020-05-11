@@ -1,6 +1,6 @@
 {
   "name": "picpay-sdk",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "SDK de integração com a API de e-commerce do PicPay",
   "main": "dist/index.js",
   "repository": "https://github.com/banzeh-dev/picpay-sdk",
