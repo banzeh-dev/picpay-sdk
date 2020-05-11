@@ -1,0 +1,30 @@
+{
+  "name": "picpay-sdk",
+  "version": "0.0.1",
+  "description": "SDK de integração com a API de e-commerce do PicPay",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "keywords": [
+    "picpay",
+    "pagamento",
+    "ecommerce",
+    "pic",
+    "pay",
+    "api",
+    "sdk",
+    "creditcard",
+    "qrcode"
+  ],
+  "author": "Flavio Takeuchi <flavio@banzeh.com.br>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^13.13.5",
+    "typed-rest-client": "^1.7.3"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
