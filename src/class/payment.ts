@@ -21,29 +21,25 @@ export class Payment {
     }
 
     public request(request: PaymentRequestInterface): Promise<PaymentResponseInterface> {
-        return new Promise<PaymentResponseInterface>((resolve, reject) => {
-            const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
-                method: HttpRequestMethodEnum.POST,
-                path: "/ecommerce/public/payments",
-                hostname: this.hostname
-            });
+        const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
+            method: HttpRequestMethodEnum.POST,
+            path: "/ecommerce/public/payments",
+            hostname: this.hostname
+        });
 
-            this.util.request<PaymentResponseInterface, PaymentRequestInterface>(options, request)
-        })
+        return this.util.request<PaymentResponseInterface, PaymentRequestInterface>(options, request)
     }
 
     public cancel(params: CancelRequestInterface): Promise<CancelResponseInterface> {
-        return new Promise<CancelResponseInterface>((resolve, reject) => {
-            const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
-                method: HttpRequestMethodEnum.POST,
-                path: encodeURI(`/ecommerce/public/payments/${params.referenceId}/cancellations`),
-                hostname: this.hostname
-            });
+        const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
+            method: HttpRequestMethodEnum.POST,
+            path: encodeURI(`/ecommerce/public/payments/${params.referenceId}/cancellations`),
+            hostname: this.hostname
+        });
 
-            const request = params.authorizationId ? { authorizationId: params.authorizationId } : {};
+        const request = params.authorizationId ? { authorizationId: params.authorizationId } : {};
 
-            this.util.request<CancelResponseInterface, CancelRequestInterface | {}>(options, request)
-        })
+        return this.util.request<CancelResponseInterface, CancelRequestInterface | {}>(options, request)
     }
 
     public status(params: StatusRequestInterface): Promise<StatusResponseInterface> {
@@ -53,14 +49,13 @@ export class Payment {
             } as ResponseErrorInterface);
         }
 
-        return new Promise<StatusResponseInterface>((resolve, reject) => {
-            const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
-                method: HttpRequestMethodEnum.GET,
-                path: encodeURI(`/ecommerce/public/payments/${params.referenceId}/status`),
-                hostname: this.hostname,
-            });
+        const path = encodeURI(`/ecommerce/public/payments/${params.referenceId}/status`);
+        const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
+            method: HttpRequestMethodEnum.GET,
+            hostname: this.hostname,
+            path,
+        });
 
-            this.util.request<StatusResponseInterface, {}>(options, {});
-        })
+        return this.util.request<StatusResponseInterface, {}>(options, {});
     }
 }
