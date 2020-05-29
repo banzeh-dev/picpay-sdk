@@ -12,40 +12,37 @@ import {
 
 export class Payment {
     private params: ConstructorInterface;
+    private util: Utils;
+    private hostname: string = 'appws.picpay.com';
 
     constructor(params: ConstructorInterface) {
         this.params = params;
+        this.util = new Utils(this.params);
     }
 
     public request(request: PaymentRequestInterface): Promise<PaymentResponseInterface> {
         return new Promise<PaymentResponseInterface>((resolve, reject) => {
-            const util = new Utils(this.params);
-            const options: IHttpRequestOptions = util.getHttpRequestOptions({
+            const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
                 method: HttpRequestMethodEnum.POST,
                 path: "/ecommerce/public/payments",
-                hostname: "appws.picpay.com"
+                hostname: this.hostname
             });
 
-            util.httpRequest(options, request)
-                .then((response) => resolve(response.data as PaymentResponseInterface))
-                .catch((err) => reject(err as ResponseErrorInterface));
+            this.util.request<PaymentResponseInterface, PaymentRequestInterface>(options, request)
         })
     }
 
     public cancel(params: CancelRequestInterface): Promise<CancelResponseInterface> {
         return new Promise<CancelResponseInterface>((resolve, reject) => {
-            const util = new Utils(this.params);
-            const options: IHttpRequestOptions = util.getHttpRequestOptions({
+            const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
                 method: HttpRequestMethodEnum.POST,
                 path: encodeURI(`/ecommerce/public/payments/${params.referenceId}/cancellations`),
-                hostname: "appws.picpay.com"
+                hostname: this.hostname
             });
 
             const request = params.authorizationId ? { authorizationId: params.authorizationId } : {};
 
-            util.httpRequest(options, request)
-                .then((response) => resolve(response.data as CancelResponseInterface))
-                .catch((err) => reject(err as ResponseErrorInterface));
+            this.util.request<CancelResponseInterface, CancelRequestInterface | {}>(options, request)
         })
     }
 
@@ -57,16 +54,13 @@ export class Payment {
         }
 
         return new Promise<StatusResponseInterface>((resolve, reject) => {
-            const util = new Utils(this.params);
-            const options: IHttpRequestOptions = util.getHttpRequestOptions({
+            const options: IHttpRequestOptions = this.util.getHttpRequestOptions({
                 method: HttpRequestMethodEnum.GET,
                 path: encodeURI(`/ecommerce/public/payments/${params.referenceId}/status`),
-                hostname: "appws.picpay.com"
+                hostname: this.hostname,
             });
 
-            util.httpRequest(options, {})
-                .then((response) => resolve(response.data as StatusResponseInterface))
-                .catch((err) => reject(err as ResponseErrorInterface));
+            this.util.request<StatusResponseInterface, {}>(options, {});
         })
     }
 }

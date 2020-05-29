@@ -1,6 +1,6 @@
 import { IncomingMessage } from 'http';
 import { request, RequestOptions } from 'https';
-import { ConstructorInterface } from '../interface';
+import { ConstructorInterface, ResponseErrorInterface } from '../interface';
 
 export class Utils {
   private params: ConstructorInterface;
@@ -36,6 +36,17 @@ export class Utils {
       statusCode: response.statusCode || 0,
       statusMessage: response.statusMessage || '',
     }
+  }
+
+  public request<T, U>(options: IHttpRequestOptions, data: U): Promise<T> {
+    return  new Promise((resolve, reject) => {
+      this.httpRequest(options, data)
+        .then((response) => {
+          const data = response.data ? response.data : {};
+          resolve(data as T)
+        })
+        .catch((reject) => reject as ResponseErrorInterface);
+    })
   }
 
   public httpRequest(options: IHttpRequestOptions, data: any): Promise<IHttpResponse> {
